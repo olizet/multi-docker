@@ -1,0 +1,21 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t olizet/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true olizet/react-test npm test
+
+after_success:
+  - docker build -t olizet/multi-client ./client
+  - docker build -t olizet/multi-nginx ./nginx
+  - docker build -t olizet/multi-server ./server
+  - docker build -t olizet/multi-worker ./worker
+
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password -stdin
+  - docker push olizet/multi-client
+  - docker push olizet/multi-nginx
+  - docker push olizet/multi-server
+  - docker push olizet/multi-worker
