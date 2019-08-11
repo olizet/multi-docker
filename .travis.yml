@@ -14,7 +14,7 @@ after_success:
   - docker build -t olizet/multi-server ./server
   - docker build -t olizet/multi-worker ./worker
 
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password -stdin
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   - docker push olizet/multi-client
   - docker push olizet/multi-nginx
   - docker push olizet/multi-server
